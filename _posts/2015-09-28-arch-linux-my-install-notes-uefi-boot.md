@@ -97,14 +97,14 @@ Set the hostname:
 # echo "leedev" > /etc/hostname
 ```
 
-Setup `hosts`:
+Edit `hosts`:
 
 ```
-# cat <<EOT >> /etc/hosts
+# nano /etc/hosts
+------------------
 127.0.0.1  localhost
 ::1        localhost
 127.0.1.1  leedev.localdomain  leedev
-EOT
 ```
 
 Set the system timezone and generate `/etc/adjtime`:
@@ -151,7 +151,7 @@ Server:
 Notebook:
 
 ```
-# pacman -S base-devel nano tmux sudo openssh rsync bash-completion git grub efibootmgr btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager gst-libav libmtp ttf-freefont libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
+# pacman -S base-devel nano tmux sudo openssh rsync bash-completion git grub efibootmgr btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
 ```
 
 Give the `wheel` group `sudo` permissions:

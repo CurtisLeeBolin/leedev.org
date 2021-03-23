@@ -58,10 +58,10 @@ Mount the subvolumes:
 # mount -o subvol=@home /dev/sda1 /mnt/home
 ```
 
-Create the base bootstrap Arch Linux root file system:
+Create the base bootstrap Arch Linux root file system with linux-hardened instead of linux:
 
 ```
-# pacstrap /mnt base
+# pacstrap /mnt base linux linux-firmware nano
 ```
 
 Create the file system table and save it:
@@ -82,20 +82,29 @@ Set the hostname:
 # echo "leedev" > /etc/hostname
 ```
 
-Set the system timezone:
+Edit `hosts`:
 
 ```
-# rm /etc/localtime
+# nano /etc/hosts
+------------------
+127.0.0.1  localhost
+::1        localhost
+127.0.1.1  leedev.localdomain  leedev
+```
+
+Set the system timezone and generate `/etc/adjtime`:
+
+```
 # ln -s /usr/share/zoneinfo/US/Central /etc/localtime
+# hwclock --systohc
 ```
 
 Configure and generate locales:
 
 ```
-# echo "LANG=en_US.UTF-8" > /etc/locale.conf
 # echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-# export LANG=en_US.UTF-8
 # locale-gen
+# echo "LANG=en_US.UTF-8" > /etc/locale.conf
 ```
 
 Configure the keyboard keymap console:
@@ -116,10 +125,18 @@ Set the password for this new user:
 # passwd leedev
 ```
 
-Install a lean but complete Gnome desktop environment:
+Install a lean but complete Server or Gnome desktop environment:
+
+Server:
 
 ```
-# pacman -S tmux sudo openssh rsync bash-completion git grub os-prober btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince eog totem mpv geany file-roller networkmanager gst-libav libmtp ttf-freefont libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp chromium cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse
+# pacman -S base-devel tmux openssh rsync bash-completion git grub btrfs-progs ecryptfs-utils
+```
+
+Notebook:
+
+```
+# pacman -S base-devel tmux sudo openssh rsync bash-completion git grub btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
 ```
 
 Give the `wheel` group `sudo` permissions:
@@ -154,10 +171,19 @@ Install Grub to the MBR:
 # grub-install /dev/sda
 ```
 
-Configure the __gdm__, __sshd__, __NetworkManager__, __systemd-timesyncd__, and __cups__ services to start at boot:
+Configure the services to start at boot:
+
+Server:
+NOTE: Configure [systemd-resolved](https://wiki.archlinux.org/index.php/Systemd-resolved) and [systemd-networkd](https://wiki.archlinux.org/index.php/Systemd-networkd).
 
 ```
-# systemctl enable gdm.service sshd.service NetworkManager.service systemd-timesyncd.service org.cups.cupsd.service
+# systemctl enable sshd.service systemd-timesyncd.service systemd-networkd.service systemd-resolved.service
+```
+
+Notebook:
+
+```
+# systemctl enable sshd.service systemd-timesyncd.service gdm.service NetworkManager.service  cups.service
 ```
 
 Exit the `chroot`:

@@ -140,7 +140,7 @@ Set the password for this new user:
 # passwd leedev
 ```
 
-Install a lean but complete Gnome desktop environment:
+Install a lean but complete Server or Gnome desktop environment:
 
 Server:
 

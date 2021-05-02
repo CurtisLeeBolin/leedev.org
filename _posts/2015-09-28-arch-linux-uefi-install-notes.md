@@ -151,7 +151,7 @@ Server:
 Notebook:
 
 ```
-# pacman -S base-devel tmux sudo openssh rsync bash-completion git grub efibootmgr btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
+# pacman -S base-devel tmux sudo openssh rsync bash-completion git grub efibootmgr btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
 ```
 
 Give the `wheel` group `sudo` permissions:
@@ -226,7 +226,7 @@ NOTE: Configure [systemd-resolved](https://wiki.archlinux.org/index.php/Systemd-
 Notebook:
 
 ```
-# systemctl enable sshd.service systemd-timesyncd.service gdm.service NetworkManager.service  cups.service
+# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service gdm.service NetworkManager.service  cups.service
 ```
 
 Exit the `chroot`:

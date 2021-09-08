@@ -157,7 +157,7 @@ Notebook:
 Give the `wheel` group `sudo` permissions:
 
 ```
-# echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/group_wheel
+# echo -e "Defaults>%wheel runcwd=*\n%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/group_wheel
 ```
 
 Edit `/etc/shadow` to prevent root login:

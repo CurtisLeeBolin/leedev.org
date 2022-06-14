@@ -43,7 +43,7 @@ The signature must be trusted by your user, not by root using the `pacman-key` c
 
 To download the missing signature:
 ```
-$ gpg --recv-keys 79BE3E4300411886
+$ gpg --keyserver hkps://keys.openpgp.org/ --recv-keys 79BE3E4300411886
 gpg: /home/lee/.gnupg/trustdb.gpg: trustdb created
 gpg: key 00411886: public key "Linus Torvalds <torvalds@linux-foundation.org>" imported
 gpg: no ultimately trusted keys found

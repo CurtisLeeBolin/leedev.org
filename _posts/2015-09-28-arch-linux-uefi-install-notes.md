@@ -33,44 +33,47 @@ sda     500.0G
 If you created a swap partition, setup the swap space and enable it:
 
 ```
-# mkswap -L SWAP /dev/sda3
-# swapon LABEL=SWAP
+# mkswap /dev/sda3
+# swapon /dev/sda3
 ```
 
 Make the FAT32 filesystem on the UEFI patition:
 
 ```
-# mkfs.fat -F32 -n UEFI /dev/sda1
+# mkfs.fat -F32 /dev/sda1
 ```
 
 Make the BTRFS on the partition for Arch Linux:
 
 ```
-# mkfs.btrfs -L ArchLinux /dev/sda2
+# mkfs.btrfs /dev/sda2
 ```
 
 Create BTRFS subvolumes:
 
 ```
-# mount LABEL=ArchLinux /mnt
+# mount /dev/sda2 /mnt
 # btrfs subvolume create /mnt/@arch
 # btrfs subvolume create /mnt/@home
+# btrfs subvolume create /mnt/@var
 # umount /mnt
 ```
 
 Mount the subvolumes:
 
 ```
-# mount -o subvol=@arch LABEL=ArchLinux /mnt
+# mount -o subvol=@arch /dev/sda2 /mnt
 # mkdir /mnt/home
-# mount -o subvol=@home LABEL=ArchLinux /mnt/home
+# mount -o subvol=@home /dev/sda2 /mnt/home
+# mkdir /mnt/var
+# mount -o subvol=@var /dev/sda2 /mnt/var
 ```
 
 Mount the UEFI partition:
 
 ```
-# mkdir -p /mnt/boot/efi
-# mount LABEL=UEFI /mnt/boot/efi
+# mkdir /mnt/boot
+# mount /dev/sda1 /mnt/boot
 ```
 
 Create the base bootstrap Arch Linux root file system with linux-hardened instead of linux:
@@ -101,7 +104,7 @@ Edit `hosts`:
 
 ```
 # nano /etc/hosts
-------------------
+-----------------
 127.0.0.1  localhost
 ::1        localhost
 127.0.1.1  leedev.localdomain  leedev
@@ -128,10 +131,11 @@ Configure the keyboard keymap console:
 # echo "KEYMAP=us" > /etc/vconsole.conf
 ```
 
-Create a user:
+Create a group and user:
 
 ```
-# useradd --home-dir /home/leedev --create-home --groups users,wheel,sys --shell /bin/bash leedev
+# groupadd --gid 1000 leedev
+# useradd --home-dir /home/leedev --create-home --uid 1000 --gid 1000 --groups wheel,sys --shell /bin/bash leedev
 ```
 
 Set the password for this new user:
@@ -145,19 +149,22 @@ Install a lean but complete Server or Gnome desktop environment:
 Server:
 
 ```
-# pacman -S base-devel tmux openssh rsync bash-completion git grub efibootmgr btrfs-progs ecryptfs-utils
+# pacman -S tmux sudo openssh rsync bash-completion git btrfs-progs ecryptfs-utils
 ```
 
 Notebook:
 
 ```
-# pacman -S base-devel tmux sudo openssh rsync bash-completion git grub efibootmgr btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
+# pacman -S tmux sudo openssh rsync bash-completion git btrfs-progs ecryptfs-utils base-devel sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse
 ```
 
 Give the `wheel` group `sudo` permissions:
 
 ```
-# echo -e "Defaults>%wheel runcwd=*\n%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/group_wheel
+# nano /etc/sudoers.d/group_wheel
+---------------------------------
+Defaults:%wheel runcwd=*
+%wheel ALL=(ALL) NOPASSWD: ALL
 ```
 
 Edit `/etc/shadow` to prevent root login:
@@ -165,7 +172,7 @@ Edit `/etc/shadow` to prevent root login:
 ```
 # nano /etc/shadow
 ------------------
-root:!!:14871::::::
+root:!*:14871::::::
 ```
 
 Edit `/etc/mkinitcpio.conf`:
@@ -192,26 +199,50 @@ Intel:
 # pacman -S intel-ucode
 ```
 
-Install Grub to the UEFI filesystem and add to the UEFI Boot Manager:
+Install bootloader:
 
 ```
-# grub-install
-```
-NOTE: Use argument `--target=i386-efi` if you have 32bit UEFI.
-
-Edit `/etc/default/grub`:
-
-```
-# nano /etc/default/grub
-------------------------
-GRUB_TIMEOUT=1
-GRUB_CMDLINE_LINUX_DEFAULT=""
+# bootctl install
 ```
 
-Make and save the grub configuration:
+Get UUID of `/` partition:
 
 ```
-# grub-mkconfig -o /boot/grub/grub.cfg
+# blkid /dev/sda2
+/dev/sda2: UUID="5e023168-f275-422e-b87f-566735100b37" UUID_SUB="1094b132-ab0a-48e5-a772-a7d092f0f66b" BLOCK_SIZE="4096" TYPE="btrfs" PARTLABEL="Linux filesystem" PARTUUID="70d16fe2-666f-4390-af97-dab0fea07583"
+```
+
+Create boot entries:
+
+```
+# nano /boot/loader/entries/arch.conf
+-------------------------------------
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /intel-ucode.img
+initrd  /initramfs-linux.img
+options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch  mitigations=off
+```
+
+```
+# nano /boot/loader/entries/arch-fallback.conf
+----------------------------------------------
+title   Arch Linux (fallback initramfs)
+linux   /vmlinuz-linux
+initrd  /intel-ucode.img
+initrd  /initramfs-linux-fallback.img
+options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch  mitigations=off
+```
+
+Setup `loader.conf`: 
+
+```
+# nano /boot/loader/loader.conf
+-------------------------------
+default  arch.conf
+timeout  1
+console-mode max
+editor   no
 ```
 
 Configure the services to start at boot:
@@ -226,7 +257,7 @@ NOTE: Configure [systemd-resolved](https://wiki.archlinux.org/index.php/Systemd-
 Notebook:
 
 ```
-# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service gdm.service NetworkManager.service  cups.service
+# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service NetworkManager.service gdm.service cups.service
 ```
 
 Exit the `chroot`:

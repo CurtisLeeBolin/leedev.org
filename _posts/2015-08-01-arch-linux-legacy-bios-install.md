@@ -47,6 +47,7 @@ Create BTRFS subvolumes:
 # mount /dev/sda1 /mnt
 # btrfs subvolume create /mnt/@arch
 # btrfs subvolume create /mnt/@home
+# btrfs subvolume create /mnt/@var
 # umount /mnt
 ```
 
@@ -56,6 +57,8 @@ Mount the subvolumes:
 # mount -o subvol=@arch /dev/sda1 /mnt
 # mkdir /mnt/home
 # mount -o subvol=@home /dev/sda1 /mnt/home
+# mkdir /mnt/var
+# mount -o subvol=@var /dev/sda1 /mnt/var
 ```
 
 Create the base bootstrap Arch Linux root file system with linux-hardened instead of linux:
@@ -116,7 +119,8 @@ Configure the keyboard keymap console:
 Create a user:
 
 ```
-# useradd --home-dir /home/leedev --create-home --gid users --groups wheel,sys --shell /bin/bash leedev
+# groupadd --gid 1000 leedev
+# useradd --home-dir /home/leedev --create-home --uid 1000 --gid 1000 --groups wheel,sys --shell /bin/bash lee
 ```
 
 Set the password for this new user:
@@ -130,19 +134,22 @@ Install a lean but complete Server or Gnome desktop environment:
 Server:
 
 ```
-# pacman -S base-devel tmux openssh rsync bash-completion git grub btrfs-progs ecryptfs-utils
+# pacman -S tmux sudo openssh rsync bash-completion git grub btrfs-progs ecryptfs-utils
 ```
 
 Notebook:
 
 ```
-# pacman -S base-devel tmux sudo openssh rsync bash-completion git grub btrfs-progs ecryptfs-utils sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
+# pacman -S tmux sudo openssh rsync bash-completion git grub btrfs-progs ecryptfs-utils base-devel sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse os-prober
 ```
 
 Give the `wheel` group `sudo` permissions:
 
 ```
-# echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/group_wheel
+# nano /etc/sudoers.d/group_wheel
+---------------------------------
+Defaults:%wheel runcwd=*
+%wheel ALL=(ALL) NOPASSWD: ALL
 ```
 
 Edit `/etc/shadow` to prevent root login:
@@ -150,13 +157,31 @@ Edit `/etc/shadow` to prevent root login:
 ```
 # nano /etc/shadow
 ------------------
-root:!:14871::::::
+root:!*:14871::::::
+```
+
+Edit `/etc/mkinitcpio.conf`:
+
+```
+# nano /etc/mkinitcpio.conf
+---------------------------
+HOOKS=(systemd autodetect modconf block filesystems keyboard)
 ```
 
 Create the `initramfs`:
 
 ```
-# mkinitcpio -p linux
+# mkinitcpio -P
+```
+
+Install CPU Microcode to be loaded by `grub`:
+
+```
+AMD:
+# pacman -S amd-ucode
+
+Intel:
+# pacman -S intel-ucode
 ```
 
 Make and save the grub configuration:
@@ -177,13 +202,13 @@ Server:
 NOTE: Configure [systemd-resolved](https://wiki.archlinux.org/index.php/Systemd-resolved) and [systemd-networkd](https://wiki.archlinux.org/index.php/Systemd-networkd).
 
 ```
-# systemctl enable sshd.service systemd-timesyncd.service systemd-networkd.service systemd-resolved.service
+# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service systemd-networkd.service
 ```
 
 Notebook:
 
 ```
-# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service gdm.service NetworkManager.service  cups.service
+# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service NetworkManager.service gdm.service cups.service
 ```
 
 Exit the `chroot`:

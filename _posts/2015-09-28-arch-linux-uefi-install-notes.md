@@ -190,7 +190,7 @@ Create the `initramfs`:
 # mkinitcpio -P
 ```
 
-Install CPU Microcode to be loaded by `grub`:
+Install CPU Microcode:
 ```
 AMD:
 # pacman -S amd-ucode

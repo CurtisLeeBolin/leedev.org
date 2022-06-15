@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Arch Linux: mdadm grow ppl'
-date: '2022-07=6-09 16:35:33'
+date: '2022-06-09 16:35:33'
 ---
 
 RAID5 with ppl consistency policy can't be grown without more steps.

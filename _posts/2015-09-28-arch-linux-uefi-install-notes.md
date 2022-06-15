@@ -251,7 +251,7 @@ Server:
 NOTE: Configure [systemd-resolved](https://wiki.archlinux.org/index.php/Systemd-resolved) and [systemd-networkd](https://wiki.archlinux.org/index.php/Systemd-networkd).
 
 ```
-# systemctl enable sshd.service systemd-timesyncd.service systemd-networkd.service systemd-resolved.service
+# systemctl enable sshd.service systemd-timesyncd.service systemd-resolved.service systemd-networkd.service
 ```
 
 Notebook:

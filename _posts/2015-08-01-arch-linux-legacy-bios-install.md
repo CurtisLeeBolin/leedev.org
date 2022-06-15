@@ -116,7 +116,7 @@ Configure the keyboard keymap console:
 # echo "KEYMAP=us" > /etc/vconsole.conf
 ```
 
-Create a user:
+Create a group and user:
 
 ```
 # groupadd --gid 1000 leedev

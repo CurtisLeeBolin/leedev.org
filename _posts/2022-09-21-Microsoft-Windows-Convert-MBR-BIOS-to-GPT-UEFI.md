@@ -139,7 +139,7 @@ Resize the MS Windows filesystem and partition to fill the empty space at the en
 
 Apply these changes
 
-Now set the `esp` and `boot` flag for the newly created UEFI partition
+Now set the `esp` and `boot` flags for the newly created UEFI partition
 
 Shutdown the VM
 

@@ -4,7 +4,7 @@ title: 'MS Windows: Convert MBR/BIOS to GPT/UEFI'
 date: '2022-09-21 08:32:21'
 ---
 
-This is a huge pain with MS Windows. The MS Windows tools often fail with no way to finish with only using MS Windows tools. The setup I wanted is not even possible with only MS tools.  I had to use a live Linux ISO to make some changes.  I am runnings MS Windows in a VM.
+This is a huge pain with MS Windows. The MS Windows tools often fail with no way to finish with only using MS Windows tools. The setup I wanted is not even possible with only MS tools.  I had to use a live Linux ISO to make some changes.  I am running MS Windows in a VM.
 
 #### NOTE: One boot of a Live Linux ISO and running a few commands is all that would be needed for Linux.
 

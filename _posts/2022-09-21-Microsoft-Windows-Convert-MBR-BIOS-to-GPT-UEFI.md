@@ -97,7 +97,7 @@ Apply these changes
 Now set the `esp` and `boot` flag for the newly created UEFI partition
 Shutdown the VM
 
-# Recreate the UEFI data in the filessystem of the UEFI partition
+# Recreate the UEFI data in the filesystem of the UEFI partition
 Boot the MS Windows `recovery drive` in the new VM
 Troubleshoot -> Command Prompt
 
@@ -123,3 +123,8 @@ Write the data to the UEFI partition's filesystem
 ```
 > bcdboot C:\windows /l en-us /s Z: /f UEFI
 ```
+
+# Booting as UEFI
+Delete the new VM in Libvirt Manger
+Do not delete the OS image
+Create a new VM with UEFI boot using this image

@@ -57,7 +57,7 @@ Shutdown the VM
 
 MS's `mbr2gpt` also fails until this is corrected.
 
-Boot the MS Windows `recovery drive` in the new VM
+Boot the MS Windows `recovery drive`
 
 Troubleshoot -> Command Prompt
 
@@ -106,7 +106,7 @@ Shutdown the VM
 
 # Convert the MBR to a GPT
 
-Boot the MS Windows `recovery drive` in the new VM
+Boot the MS Windows `recovery drive`
 
 Troubleshoot -> Command Prompt
 
@@ -146,7 +146,7 @@ Shutdown the VM
 
 # Recreate the UEFI data in the filesystem of the UEFI partition
 
-Boot the MS Windows `recovery drive` in the new VM
+Boot the MS Windows `recovery drive`
 
 Troubleshoot -> Command Prompt
 

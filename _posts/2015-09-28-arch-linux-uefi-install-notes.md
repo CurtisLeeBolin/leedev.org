@@ -149,13 +149,13 @@ Install a lean but complete Server or Gnome desktop environment:
 Server:
 
 ```
-# pacman -S tmux sudo openssh rsync bash-completion git btrfs-progs ecryptfs-utils
+# pacman -S tmux sudo openssh rsync bash-completion git btrfs-progs ecryptfs-utils efibootmgr
 ```
 
 Notebook:
 
 ```
-# pacman -S tmux sudo openssh rsync bash-completion git btrfs-progs ecryptfs-utils base-devel sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweak-tool ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse
+# pacman -S tmux sudo openssh rsync bash-completion git btrfs-progs ecryptfs-utils base-devel sysstat gdm gnome-shell gnome-terminal nautilus gnome-control-center gnome-tweaks ttf-liberation system-config-printer gnome-backgrounds gnome-keyring gnome-disk-utility baobab gnome-screenshot cheese evince epiphany eog totem mpv geany file-roller networkmanager dhclient gst-libav libmtp ttf-freefont noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra libva-vdpau-driver libdvdcss pkgfile xorg-server xorg-xinit libvdpau xf86-video-amdgpu xf86-input-libinput mesa-vdpau mesa-libgl gst-plugins-ugly xf86-input-libinput gimp inkscape cups ghostscript gsfonts foomatic-db foomatic-db-engine foomatic-db-nonfree seahorse efibootmgr
 ```
 
 Give the `wheel` group `sudo` permissions:

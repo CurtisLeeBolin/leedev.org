@@ -221,7 +221,7 @@ title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux.img
-options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch  mitigations=off
+options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch mitigations=off
 ```
 
 ```
@@ -231,7 +231,7 @@ title   Arch Linux (fallback initramfs)
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux-fallback.img
-options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch  mitigations=off
+options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch mitigations=off
 ```
 
 Setup `loader.conf`: 

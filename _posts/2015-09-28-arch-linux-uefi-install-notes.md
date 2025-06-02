@@ -16,7 +16,7 @@ Change shell to bash and reload shell:
 Partition your storage device with GUID Partition Table (GPT) partition table:
 
 ```
-# gdisk /dev/sda
+# gdisk /dev/nvme0n1
 ```
 __NOTE:__ Make sure to create a __UEFI__ partition.  The partition type code to use in `gdisk` is `EF00`.
 
@@ -24,35 +24,36 @@ This is the how my SSD is partitioned:
 
 ```
 NAME    SIZE    MOUNTPOINT
-sda     500.0G
-├─sda1  128.0M  part /boot/efi
-├─sda2  491.9G  part /,/home/
-└─sda3    8.0G  part [SWAP]
+nvme0n1     259:0    0  238.5G  0 disk
+├─nvme0n1p1 259:4    0      1G  0 part
+├─nvme0n1p2 259:5    0     99G  0 part
+└─nvme0n1p3 259:6    0  130.5G  0 part
+└─nvme0n1p4 259:7    0    8.0G  0 part
 ```
 
 If you created a swap partition, setup the swap space and enable it:
 
 ```
-# mkswap /dev/sda3
-# swapon /dev/sda3
+# mkswap /dev/nvme0n1p4
+# swapon /dev/nvme0n1p4
 ```
 
 Make the FAT32 filesystem on the UEFI patition:
 
 ```
-# mkfs.fat -F32 /dev/sda1
+# mkfs.fat -F32 /dev/nvme0n1p1
 ```
 
 Make the BTRFS on the partition for Arch Linux:
 
 ```
-# mkfs.btrfs /dev/sda2
+# mkfs.btrfs /dev/nvme0n1p2
 ```
 
 Create BTRFS subvolumes:
 
 ```
-# mount /dev/sda2 /mnt
+# mount /dev/nvme0n1p2 /mnt
 # btrfs subvolume create /mnt/@arch
 # btrfs subvolume create /mnt/@home
 # btrfs subvolume create /mnt/@var
@@ -62,18 +63,18 @@ Create BTRFS subvolumes:
 Mount the subvolumes:
 
 ```
-# mount -o subvol=@arch /dev/sda2 /mnt
+# mount -o subvol=@arch /dev/nvme0n1p2 /mnt
 # mkdir /mnt/home
-# mount -o subvol=@home /dev/sda2 /mnt/home
+# mount -o subvol=@home /dev/nvme0n1p2 /mnt/home
 # mkdir /mnt/var
-# mount -o subvol=@var /dev/sda2 /mnt/var
+# mount -o subvol=@var /dev/nvme0n1p2 /mnt/var
 ```
 
 Mount the UEFI partition:
 
 ```
 # mkdir /mnt/boot
-# mount /dev/sda1 /mnt/boot
+# mount /dev/nvme0n1p1 /mnt/boot
 ```
 
 Create the base bootstrap Arch Linux root file system with linux-hardened instead of linux:
@@ -175,21 +176,6 @@ Edit `/etc/shadow` to prevent root login:
 root:!*:14871::::::
 ```
 
-Edit `/etc/mkinitcpio.conf`:
-NOTE: For a server, read [RAID](https://wiki.archlinux.org/index.php/RAID).
-
-```
-# nano /etc/mkinitcpio.conf
----------------------------
-HOOKS=(systemd autodetect modconf block filesystems keyboard)
-```
-
-Create the `initramfs`:
-
-```
-# mkinitcpio -P
-```
-
 Install CPU Microcode:
 ```
 AMD:
@@ -197,6 +183,21 @@ AMD:
 
 Intel:
 # pacman -S intel-ucode
+```
+
+Edit `/etc/mkinitcpio.conf`:
+NOTE: For a server, read [RAID](https://wiki.archlinux.org/index.php/RAID).
+
+```
+# nano /etc/mkinitcpio.conf
+---------------------------
+HOOKS=(systemd autodetect microcode modconf block filesystems keyboard)
+```
+
+Create the `initramfs`:
+
+```
+# mkinitcpio -P
 ```
 
 Install bootloader:
@@ -208,8 +209,8 @@ Install bootloader:
 Get UUID of `/` partition:
 
 ```
-# blkid /dev/sda2
-/dev/sda2: UUID="5e023168-f275-422e-b87f-566735100b37" UUID_SUB="1094b132-ab0a-48e5-a772-a7d092f0f66b" BLOCK_SIZE="4096" TYPE="btrfs" PARTLABEL="Linux filesystem" PARTUUID="70d16fe2-666f-4390-af97-dab0fea07583"
+# blkid /dev/nvme0n1p2
+/dev/nvme0n1p2: UUID="5e023168-f275-422e-b87f-566735100b37" UUID_SUB="1094b132-ab0a-48e5-a772-a7d092f0f66b" BLOCK_SIZE="4096" TYPE="btrfs" PARTLABEL="Linux filesystem" PARTUUID="70d16fe2-666f-4390-af97-dab0fea07583"
 ```
 
 Create boot entries:
@@ -234,7 +235,7 @@ initrd  /initramfs-linux-fallback.img
 options root=UUID=5e023168-f275-422e-b87f-566735100b37 rw rootflags=subvol=@arch mitigations=off
 ```
 
-Setup `loader.conf`: 
+Setup `loader.conf`:
 
 ```
 # nano /boot/loader/loader.conf

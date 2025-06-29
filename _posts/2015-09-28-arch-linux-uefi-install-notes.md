@@ -168,12 +168,10 @@ Defaults:%wheel runcwd=*
 %wheel ALL=(ALL) NOPASSWD: ALL
 ```
 
-Edit `/etc/shadow` to prevent root login:
+Prevent root login:
 
 ```
-# nano /etc/shadow
-------------------
-root:!*:14871::::::
+# passwd --lock root
 ```
 
 Install CPU Microcode:

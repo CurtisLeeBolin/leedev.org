@@ -204,6 +204,13 @@ Install bootloader:
 # bootctl install
 ```
 
+Buggy UEFI Firmware, Manual Add Entry:
+
+```
+# efibootmgr --create --disk /dev/nvme0n1 --part 1 --label "systemd-boot" --loader /EFI/systemd/systemd-bootx64.efi
+
+```
+
 Get UUID of `/` partition:
 
 ```

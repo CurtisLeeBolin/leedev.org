@@ -38,21 +38,23 @@ UEFI boot USB flash drive on server
 
 # Live Alpine Linux Session
 
-`# setup-apkcache`
-
-`# setup-apkrepos`
-
-`# apk update`
-
-`# apk add lsblk wipefs gptfdisk btrfs-progs lvm2 nano`
+```
+# setup-apkcache
+# setup-apkrepos
+# apk update
+# apk add lsblk wipefs gptfdisk btrfs-progs lvm2 nano
+```
 
 If you need to search for a package to install:
+
 `# apk search <package or binary name>`
 
 Partition your drive.
 
-`# wipefs --all /dev/<device name>`
-`# gdisk /dev/<device name>`
+```
+# wipefs --all /dev/<device name>
+# gdisk /dev/<device name>
+```
 
 ```
 Command (? for help): n
@@ -114,35 +116,52 @@ OK; writing new GUID partition table (GPT) to /dev/sdc.
 The operation has completed successfully.
 ```
 
-`# mkswap /dev/sdc4`
-`# swapon /dev/sdc4`
+```
+# mkswap /dev/sdc4
+# swapon /dev/sdc4
+```
 
-`# pvcreate /dev/sdc3`
-`# vgcreate vg0 /dev/sdc3`
+```
+# pvcreate /dev/sdc3
+# vgcreate vg0 /dev/sdc3
+```
 
-`# mkfs.btrfs /dev/sdc2`
-`# mount -t btrfs /dev/sdc2 /mnt/`
+```
+# mkfs.btrfs /dev/sdc2
+# mount -t btrfs /dev/sdc2 /mnt/
+```
 
-`# mkfs.vfat -F32 /dev/sdc1`
-`# mkdir /mnt/boot/`
-`# mount /dev/sdc1 /mnt/boot/`
-
+```
+# mkfs.vfat -F32 /dev/sdc1
+# mkdir /mnt/boot/
+# mount /dev/sdc1 /mnt/boot/
+```
 
 # Installation
 
 https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts
 
-`# export BOOTLOADER=grub`
-`# export USE_EFI=true`
-`# export DISKLABEL=gpt`
+```
+# export BOOTLOADER=grub
+# export USE_EFI=true
+# export DISKLABEL=gpt
+```
 
-`# setup-alpine`
-`Ip address for eth0?` `dhcp`
-EXIT SETUP AT `Disk & Install`
+```
+# setup-alpine
+
+Ip address for eth0? dhcp
+
+###############################
+#EXIT SETUP AT 'Disk & Install'
+###############################
+```
 
 `# setup-disk -m sys /mnt/`
 
 Remove USB flash drive
 
-`# umount /mnt/boot /mnt/`
-`# reboot`
+```
+# umount /mnt/boot /mnt/
+# reboot
+```

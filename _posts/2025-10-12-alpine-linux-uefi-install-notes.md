@@ -5,7 +5,7 @@ date: '2025-10-12 15:30:49'
 ---
 
 
-# Local Linux Computer
+## Local Linux Computer
 
 USB flash drive
   - `gpt`
@@ -36,7 +36,7 @@ UEFI boot USB flash drive on server
 `$ ssh root@<IP>`
 
 
-# Live Alpine Linux Session
+## Live Alpine Linux Session
 
 ```
 # setup-apkcache
@@ -137,7 +137,7 @@ The operation has completed successfully.
 # mount /dev/sdc1 /mnt/boot/
 ```
 
-# Installation
+## Installation
 
 https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts
 

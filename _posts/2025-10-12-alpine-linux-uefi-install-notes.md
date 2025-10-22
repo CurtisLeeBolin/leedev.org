@@ -152,9 +152,9 @@ https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts
 
 Ip address for eth0? dhcp
 
-###############################
-#EXIT SETUP AT 'Disk & Install'
-###############################
+##################################
+# EXIT SETUP AT 'Disk & Install' #
+##################################
 ```
 
 `# setup-disk -m sys /mnt/`

@@ -10,7 +10,7 @@ By default opening an archive file in Nautilus uncompresses the archive file ins
 mimes=( application/zip application/x-tar application/gzip application/x-bzip2 application/x-xz application/x-7z-compressed application/vnd.rar application/x-rar )
 
 for mime in "${mimes[@]}"; do
-  xdg-mime default org.gnome.FileRoller.desktop "$mime"
+  xdg-mime default org.gnome.FileRoller.desktop "${mime}"
 done
 ```
 
